@@ -4,1241 +4,431 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vocab — SSC Word Journal</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #1a1a1a;
-    --ink-soft: #4a4a4a;
-    --ink-mute: #888;
-    --paper: #faf8f4;
-    --paper-warm: #f3efe8;
-    --paper-rule: #e8e3da;
-    --accent: #2b5f9e;
-    --accent-light: #dde9f7;
-    --accent-tel: #5c3d8f;
-    --accent-tel-light: #ede7f7;
-    --syn: #1a6b47;
-    --syn-bg: #e3f4ec;
-    --ant: #8a3a1a;
-    --ant-bg: #faeae3;
-    --gold: #b8930a;
-    --gold-bg: #fdf4dc;
-  }
+:root{--ink:#1a1a1a;--ink-soft:#4a4a4a;--ink-mute:#888;--paper:#faf8f4;--paper-warm:#f3efe8;--paper-rule:#e8e3da;--sb:#1e1e1e;--sb-hover:#2a2a2a;--sb-active:#272727;--sb-border:#2e2e2e;--accent:#2b5f9e;--accent-light:#dde9f7;--bright:#7ab2f0;--tel:#5c3d8f;--tel-bg:#ede7f7;--syn:#1a6b47;--syn-bg:#e3f4ec;--ant:#8a3a1a;--ant-bg:#faeae3;--gold:#b8930a;--gold-bg:#fdf4dc;--sw:268px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;display:flex;min-height:100vh}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* SIDEBAR */
+.sb{width:var(--sw);background:var(--sb);min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;overflow-y:auto;z-index:200;border-right:1px solid var(--sb-border)}
+.sb-brand{padding:1.6rem 1.25rem 1.2rem;border-bottom:1px solid var(--sb-border)}
+.sb-brand .eye{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#555;margin-bottom:4px}
+.sb-brand h1{font-family:'Lora',serif;font-size:1.25rem;font-weight:600;color:#e8e8e8;line-height:1.2}
+.sb-brand h1 span{color:var(--bright)}
+.sb-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#484848;font-weight:500;padding:1.2rem 1.25rem .45rem}
 
-  html { scroll-behavior: smooth; }
+.day-item{border-bottom:1px solid #242424;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
+.day-item:hover{background:var(--sb-hover)}
+.day-item.active{background:var(--sb-active);border-left-color:var(--bright)}
+.day-hd{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.25rem .45rem}
+.day-item.active .day-hd{padding-left:calc(1.25rem - 3px)}
+.day-title{font-size:13px;font-weight:500;color:#b0b0b0}
+.day-item.active .day-title{color:var(--bright)}
+.day-cnt{font-size:10px;background:#2c2c2c;color:#666;padding:1px 8px;border-radius:100px}
+.day-item.active .day-cnt{background:#1a3357;color:var(--bright)}
+.day-wlist{padding:0 1.25rem .7rem}
+.dwp{font-size:11.5px;color:#555;padding:1.5px 0;display:block;line-height:1.65}
+.day-item.active .dwp{color:#888}
+.day-item:hover .dwp{color:#777}
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column}
+.pg-header{background:var(--ink);color:var(--paper);padding:2rem 2.5rem 1.75rem;border-bottom:3px solid var(--accent)}
+.pg-header .dlabel{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-bottom:.45rem}
+.pg-header h2{font-family:'Lora',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:600;line-height:1.2}
+.wpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:.85rem}
+.wpill{font-size:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);color:#aaa;padding:2px 10px;border-radius:100px}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 3rem 2rem 2.5rem;
-    text-align: center;
-    border-bottom: 4px solid var(--accent);
-  }
-  header .eyebrow {
-    font-size: 11px;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #aaa;
-    margin-bottom: .75rem;
-    font-weight: 300;
-  }
-  header h1 {
-    font-family: 'Lora', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 600;
-    letter-spacing: -.01em;
-    line-height: 1.1;
-  }
-  header h1 span { color: #7ab2f0; }
-  header .tagline {
-    margin-top: .75rem;
-    font-size: 14px;
-    color: #bbb;
-    font-weight: 300;
-  }
+.content{padding:2rem 2.5rem 5rem;max-width:800px}
 
-  /* ── NAV TABS ── */
-  .day-nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--ink);
-    border-bottom: 1px solid #333;
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    padding: 0 2rem;
-  }
-  .day-tab {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 14px 28px;
-    cursor: pointer;
-    letter-spacing: .04em;
-    border-bottom: 3px solid transparent;
-    transition: color .2s, border-color .2s;
-  }
-  .day-tab:hover { color: #eee; }
-  .day-tab.active { color: #7ab2f0; border-bottom-color: #7ab2f0; }
+.day-section{display:none}
+.day-section.visible{display:block}
 
-  /* ── MAIN LAYOUT ── */
-  main { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+/* WORD CARD */
+.wcard{background:#fff;border:1px solid var(--paper-rule);border-radius:12px;margin-bottom:2rem;overflow:hidden;animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.wcard:nth-child(2){animation-delay:.06s}.wcard:nth-child(3){animation-delay:.12s}.wcard:nth-child(4){animation-delay:.18s}.wcard:nth-child(5){animation-delay:.24s}
+.stripe{height:3px;background:var(--accent)}
+.cbody{padding:1.75rem 2rem}
+.cmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.widx{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);font-weight:500}
+.spill{font-size:11px;font-weight:500;padding:2px 10px;border-radius:100px;background:var(--accent-light);color:var(--accent)}
+.wname{font-family:'Lora',serif;font-size:2rem;font-weight:600;color:var(--ink);line-height:1.1;margin-bottom:6px}
+.wpp{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap}
+.wpos{font-size:13px;color:var(--ink-mute);font-style:italic}
+.wpron{font-size:12px;background:var(--paper-warm);color:var(--ink-soft);padding:2px 10px;border-radius:100px;font-weight:500}
+.men{font-size:15.5px;color:var(--ink-soft);line-height:1.65;margin-bottom:10px}
+.mtel{font-size:14px;color:var(--tel);background:var(--tel-bg);border-left:3px solid var(--tel);padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:1.25rem;line-height:1.6}
+.sarow{display:flex;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.sablk{flex:1;min-width:155px}
+.salbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--ink-mute);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;padding:3px 10px;border-radius:100px;font-weight:400}
+.cs{background:var(--syn-bg);color:var(--syn)}
+.ca{background:var(--ant-bg);color:var(--ant)}
+.extog{background:none;border:1px solid var(--paper-rule);border-radius:8px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s}
+.extog:hover{background:var(--accent-light)}
+.extog .arr{transition:transform .2s}
+.extog.open .arr{transform:rotate(180deg)}
+.expanel{display:none;margin-top:1.25rem;border-top:1px solid var(--paper-rule);padding-top:1.25rem}
+.expanel.open{display:block}
+.exi{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px dashed var(--paper-rule)}
+.exi:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.exn{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.exe{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:4px}
+.ext{font-size:13px;color:var(--ink-soft);font-style:italic;line-height:1.6;margin-bottom:5px}
+.exu{font-size:12px;color:var(--ink-mute);background:var(--paper-warm);padding:3px 10px;border-radius:4px;display:inline-block}
 
-  .day-section { display: none; }
-  .day-section.visible { display: block; }
+/* APPENDIX */
+.app{background:var(--paper-warm);border:1px solid var(--paper-rule);border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem}
+.app h3{font-family:'Lora',serif;font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--paper-rule)}
+.app h3+h3{margin-top:1.25rem}
+.ppgrid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.25rem}
+.pp{background:var(--gold-bg);color:var(--gold);border:1px solid #e8d28a;border-radius:100px;font-size:12px;font-weight:500;padding:3px 12px}
+.etlist{list-style:none;margin-bottom:.5rem}
+.etlist li{font-size:14px;color:var(--ink-soft);padding:5px 0 5px 1rem;border-left:2px solid var(--paper-rule);margin-bottom:4px;line-height:1.5}
+.etlist li strong{color:var(--accent)}
+.rvlist{list-style:none;counter-reset:rv}
+.rvlist li{counter-increment:rv;display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px dashed var(--paper-rule);font-size:14px;color:var(--ink-soft);flex-wrap:wrap}
+.rvlist li:last-child{border-bottom:none}
+.rvlist li::before{content:counter(rv)".";font-family:'Lora',serif;font-weight:600;color:var(--accent);min-width:18px;font-size:15px}
+.rvq{flex:1;min-width:200px}
+.rva{font-size:12px;font-weight:500;color:var(--syn);background:var(--syn-bg);padding:2px 10px;border-radius:100px;white-space:nowrap;transition:opacity .2s}
+.rva.hidden{opacity:0;pointer-events:none}
+.rvbtn{background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-top:1rem;transition:background .15s}
+.rvbtn:hover{background:var(--accent)}
+.rvbtn:disabled{opacity:.4;cursor:default;background:var(--ink)}
 
-  .day-header {
-    padding: 2.5rem 0 1.5rem;
-    border-bottom: 1px solid var(--paper-rule);
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: .5rem;
-  }
-  .day-header h2 {
-    font-family: 'Lora', serif;
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--ink);
-  }
-  .day-header .day-meta {
-    font-size: 12px;
-    color: var(--ink-mute);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  /* ── WORD CARD ── */
-  .word-card {
-    background: #fff;
-    border: 1px solid var(--paper-rule);
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    overflow: hidden;
-    animation: rise .4s ease both;
-  }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .word-card:nth-child(2) { animation-delay: .05s; }
-  .word-card:nth-child(3) { animation-delay: .10s; }
-  .word-card:nth-child(4) { animation-delay: .15s; }
-  .word-card:nth-child(5) { animation-delay: .20s; }
-
-  /* card top stripe */
-  .card-stripe {
-    height: 4px;
-    background: var(--accent);
-  }
-
-  .card-body { padding: 1.75rem 2rem; }
-
-  /* word number + source */
-  .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .word-index {
-    font-size: 11px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
-    font-weight: 500;
-  }
-  .source-pill {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 10px;
-    border-radius: 100px;
-    background: var(--accent-light);
-    color: var(--accent);
-    letter-spacing: .04em;
-  }
-
-  /* word + pos */
-  .word-name {
-    font-family: 'Lora', serif;
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.1;
-    margin-bottom: 4px;
-  }
-  .word-pos-pron {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-  }
-  .word-pos {
-    font-size: 13px;
-    color: var(--ink-mute);
-    font-style: italic;
-  }
-  .word-pron {
-    font-size: 12px;
-    background: var(--paper-warm);
-    color: var(--ink-soft);
-    padding: 2px 10px;
-    border-radius: 100px;
-    font-weight: 500;
-    letter-spacing: .02em;
-  }
-
-  /* meaning */
-  .meaning-en {
-    font-size: 15.5px;
-    color: var(--ink-soft);
-    line-height: 1.65;
-    margin-bottom: 8px;
-  }
-  .meaning-tel {
-    font-size: 14px;
-    color: var(--accent-tel);
-    background: var(--accent-tel-light);
-    border-left: 3px solid var(--accent-tel);
-    padding: 8px 12px;
-    border-radius: 0 6px 6px 0;
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
-  }
-
-  /* syn / ant row */
-  .sa-row {
-    display: flex;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
-  }
-  .sa-block { flex: 1; min-width: 180px; }
-  .sa-label {
-    font-size: 10px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: var(--ink-mute);
-    margin-bottom: 6px;
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
-  .chip {
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 100px;
-    font-weight: 400;
-  }
-  .chip-syn { background: var(--syn-bg); color: var(--syn); }
-  .chip-ant { background: var(--ant-bg); color: var(--ant); }
-
-  /* examples toggle */
-  .examples-toggle {
-    background: none;
-    border: 1px solid var(--paper-rule);
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--accent);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background .15s;
-  }
-  .examples-toggle:hover { background: var(--accent-light); }
-  .examples-toggle .arrow { transition: transform .2s; font-style: normal; }
-  .examples-toggle.open .arrow { transform: rotate(180deg); }
-
-  .examples-panel {
-    display: none;
-    margin-top: 1.25rem;
-    border-top: 1px solid var(--paper-rule);
-    padding-top: 1.25rem;
-  }
-  .examples-panel.open { display: block; }
-
-  .example-item {
-    margin-bottom: 1.25rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px dashed var(--paper-rule);
-  }
-  .example-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-  .ex-num {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-  .ex-en {
-    font-size: 14.5px;
-    color: var(--ink);
-    line-height: 1.6;
-    margin-bottom: 4px;
-  }
-  .ex-tel {
-    font-size: 13px;
-    color: var(--ink-soft);
-    font-style: italic;
-    line-height: 1.6;
-    margin-bottom: 4px;
-  }
-  .ex-usage {
-    font-size: 12px;
-    color: var(--ink-mute);
-    background: var(--paper-warm);
-    padding: 4px 10px;
-    border-radius: 4px;
-    display: inline-block;
-  }
-
-  /* ── APPENDIX ── */
-  .appendix {
-    background: var(--paper-warm);
-    border: 1px solid var(--paper-rule);
-    border-radius: 12px;
-    padding: 1.75rem 2rem;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-  }
-  .appendix h3 {
-    font-family: 'Lora', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 1rem;
-    padding-bottom: .75rem;
-    border-bottom: 1px solid var(--paper-rule);
-  }
-  .etym-list { list-style: none; margin-bottom: 1.25rem; }
-  .etym-list li {
-    font-size: 14px;
-    color: var(--ink-soft);
-    padding: 5px 0;
-    padding-left: 1rem;
-    border-left: 2px solid var(--paper-rule);
-    margin-bottom: 4px;
-  }
-  .etym-list li strong { color: var(--accent); }
-
-  .prefix-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 1.25rem;
-  }
-  .prefix-pill {
-    background: var(--gold-bg);
-    color: var(--gold);
-    border: 1px solid #e8d28a;
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 3px 12px;
-  }
-
-  .review-list { list-style: none; counter-reset: review; }
-  .review-list li {
-    counter-increment: review;
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px dashed var(--paper-rule);
-    font-size: 14px;
-    color: var(--ink-soft);
-  }
-  .review-list li:last-child { border-bottom: none; }
-  .review-list li::before {
-    content: counter(review) ".";
-    font-family: 'Lora', serif;
-    font-weight: 600;
-    color: var(--accent);
-    min-width: 20px;
-    font-size: 15px;
-  }
-  .review-answer {
-    margin-left: auto;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--syn);
-    background: var(--syn-bg);
-    padding: 2px 10px;
-    border-radius: 100px;
-    cursor: pointer;
-    user-select: none;
-    transition: opacity .15s;
-  }
-  .review-answer.hidden { opacity: 0; pointer-events: none; }
-  .review-answer:hover { opacity: .85; }
-
-  .show-answers-btn {
-    background: var(--ink);
-    color: var(--paper);
-    border: none;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: background .15s;
-  }
-  .show-answers-btn:hover { background: var(--accent); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 500px) {
-    .card-body { padding: 1.25rem 1.25rem; }
-    .word-name { font-size: 1.6rem; }
-    .sa-row { flex-direction: column; gap: .75rem; }
-    .day-tab { padding: 14px 16px; font-size: 12px; }
-  }
+/* MOBILE */
+.mob{display:none;background:var(--ink);padding:.7rem 1rem;align-items:center;justify-content:space-between;border-bottom:1px solid #2a2a2a;position:sticky;top:0;z-index:300}
+.mob span{font-family:'Lora',serif;font-size:.95rem;font-weight:600;color:#e8e8e8}
+.mob span em{color:var(--bright);font-style:normal}
+.ham{background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;padding:2px 6px;line-height:1}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190}
+@media(max-width:768px){
+  :root{--sw:260px}
+  .sb{transform:translateX(-100%);transition:transform .25s ease}
+  .sb.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .main{margin-left:0}
+  .mob{display:flex}
+  .content{padding:1.5rem 1.25rem 4rem}
+  .pg-header{padding:1.5rem 1.25rem}
+  .cbody{padding:1.25rem}
+  .wname{font-size:1.6rem}
+  .sarow{flex-direction:column;gap:.75rem}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="eyebrow">SSC · One Word Substitution</div>
-  <h1>Word <span>Journal</span></h1>
-  <div class="tagline">Read · Understand · Remember</div>
-</header>
+<div class="overlay" id="ov" onclick="closeSB()"></div>
 
-<nav class="day-nav">
-  <button class="day-tab active" onclick="switchDay(1, this)">Day 1</button>
-  <button class="day-tab" onclick="switchDay(2, this)">Day 2</button>
-</nav>
+<aside class="sb" id="sb">
+  <div class="sb-brand">
+    <div class="eye">SSC · One Word Substitution</div>
+    <h1>Word <span>Journal</span></h1>
+  </div>
+  <div class="sb-lbl">All Days</div>
 
-<main>
-
-<!-- ══════════════════════════════════════════
-     DAY 1
-═══════════════════════════════════════════ -->
-<section id="day-1" class="day-section visible">
-
-  <div class="day-header">
-    <h2>Day 1 — Words 1 to 5</h2>
-    <span class="day-meta">Part A · SSC Previous Years</span>
+  <div class="day-item active" onclick="sw(1,this)">
+    <div class="day-hd"><span class="day-title">Day 1</span><span class="day-cnt">5 words</span></div>
+    <div class="day-wlist">
+      <span class="dwp">1. Infallible</span>
+      <span class="dwp">2. Misogynist</span>
+      <span class="dwp">3. Philanthropist</span>
+      <span class="dwp">4. Misanthrope</span>
+      <span class="dwp">5. Bureaucracy</span>
+    </div>
   </div>
 
-  <!-- WORD 1 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 01</span>
-        <span class="source-pill">Part A — SSC OWS</span>
+  <div class="day-item" onclick="sw(2,this)">
+    <div class="day-hd"><span class="day-title">Day 2</span><span class="day-cnt">5 words</span></div>
+    <div class="day-wlist">
+      <span class="dwp">6. Cannibal</span>
+      <span class="dwp">7. Claustrophobia</span>
+      <span class="dwp">8. Egoist</span>
+      <span class="dwp">9. Elegy</span>
+      <span class="dwp">10. Epilogue</span>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="mob">
+    <span>Word <em>Journal</em></span>
+    <button class="ham" onclick="togSB()">☰</button>
+  </div>
+
+  <!-- ═══════ DAY 1 ═══════ -->
+  <div id="day-1" class="day-section visible">
+    <div class="pg-header">
+      <div class="dlabel">Day 1 · Words 1–5 · Part A — SSC OWS</div>
+      <h2>Infallible to Bureaucracy</h2>
+      <div class="wpills">
+        <span class="wpill">Infallible</span><span class="wpill">Misogynist</span><span class="wpill">Philanthropist</span><span class="wpill">Misanthrope</span><span class="wpill">Bureaucracy</span>
       </div>
-      <div class="word-name">Infallible</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Adjective</span>
-        <span class="word-pron">in-FAL-uh-bul</span>
-      </div>
-      <div class="meaning-en">Incapable of making mistakes or being wrong; absolutely trustworthy and never failing.</div>
-      <div class="meaning-tel">ఎప్పుడూ తప్పు చేయని, ఖచ్చితమైన, పొరపాటు చేయని</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Flawless</span>
-            <span class="chip chip-syn">Perfect</span>
-            <span class="chip chip-syn">Foolproof</span>
-            <span class="chip chip-syn">Reliable</span>
-          </div>
+    </div>
+    <div class="content">
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 01</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Infallible</div>
+        <div class="wpp"><span class="wpos">Adjective</span><span class="wpron">in-FAL-uh-bul</span></div>
+        <div class="men">Incapable of making mistakes or being wrong; absolutely trustworthy and never failing.</div>
+        <div class="mtel">ఎప్పుడూ తప్పు చేయని, ఖచ్చితమైన, పొరపాటు చేయని</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Flawless</span><span class="chip cs">Perfect</span><span class="chip cs">Foolproof</span><span class="chip cs">Reliable</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Fallible</span><span class="chip ca">Flawed</span><span class="chip ca">Imperfect</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">Even the most advanced technology is not entirely infallible.</div><div class="ext">అత్యంత అధునాతన సాంకేతిక పరిజ్ఞానం కూడా పూర్తిగా తప్పు లేనిది కాదు.</div><span class="exu">Describes an inanimate object/system that can still have errors.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">He believed his memory was infallible, but he still forgot her birthday.</div><div class="ext">తన జ్ఞాపకశక్తి ఎప్పుడూ తప్పు చేయదని అతను నమ్మాడు, కానీ అతను ఆమె పుట్టినరోజును మర్చిపోయాడు.</div><span class="exu">Describes a specific human trait feeling overconfident.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">The doctor gave me an infallible cure for my headache.</div><div class="ext">డాక్టర్ నా తలనొప్పికి ఖచ్చితంగా పనిచేసే మందు ఇచ్చారు.</div><span class="exu">Describes a solution or method that guarantees success.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">No human being is infallible; we all make mistakes.</div><div class="ext">ఏ మనిషీ పూర్తిగా పొరపాటు చేయనివాడు కాదు; మనమందరం తప్పులు చేస్తాము.</div><span class="exu">Universal truth about human nature.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">She has an infallible sense of direction and never gets lost.</div><div class="ext">ఆమెకు దారి కనుక్కోవడంలో ఎప్పుడూ తప్పు చేయని నైపుణ్యం ఉంది.</div><span class="exu">Describes a specific, perfected skill.</span></div>
         </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Fallible</span>
-            <span class="chip chip-ant">Flawed</span>
-            <span class="chip chip-ant">Imperfect</span>
-          </div>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 02</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Misogynist</div>
+        <div class="wpp"><span class="wpos">Noun / Adjective</span><span class="wpron">mi-SOJ-uh-nist</span></div>
+        <div class="men">A person who strongly dislikes, despises, or is prejudiced against women.</div>
+        <div class="mtel">స్త్రీలను ద్వేషించే వ్యక్తి, స్త్రీ ద్వేషి</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Woman-hater</span><span class="chip cs">Sexist</span><span class="chip cs">Male chauvinist</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Feminist</span><span class="chip ca">Philogynist</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The author's negative portrayal of female characters revealed him to be a misogynist.</div><div class="ext">రచయిత స్త్రీ పాత్రలను ప్రతికూలంగా చిత్రీకరించడం అతను ఒక స్త్రీ ద్వేషి అని వెల్లడించింది.</div><span class="exu">Labels someone's hidden character.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">She refused to work for a boss who was a known misogynist.</div><div class="ext">అందరికీ తెలిసిన స్త్రీ ద్వేషి అయిన బాస్ కింద పనిచేయడానికి ఆమె నిరాకరించింది.</div><span class="exu">Describes a professional environment affected by prejudice.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">A true misogynist disrespects women's opinions in the workplace.</div><div class="ext">ఒక నిజమైన స్త్రీ ద్వేషి కార్యాలయంలో మహిళల అభిప్రాయాలను అగౌరవపరుస్తాడు.</div><span class="exu">Subject showing the direct action of the noun.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">His misogynist comments caused an uproar on social media.</div><div class="ext">అతని స్త్రీ ద్వేషపూరిత వ్యాఖ్యలు సోషల్ మీడియాలో దుమారం రేపాయి.</div><span class="exu">Used as an adjective describing the type of comments.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">Society must educate people to ensure no one grows up to be a misogynist.</div><div class="ext">ఎవరూ స్త్రీ ద్వేషిగా ఎదగకుండా సమాజం ప్రజలకు అవగాహన కల్పించాలి.</div><span class="exu">A general moral statement about societal goals.</span></div>
         </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">Even the most advanced technology is not entirely infallible.</div>
-          <div class="ex-tel">అత్యంత అధునాతన సాంకేతిక పరిజ్ఞానం కూడా పూర్తిగా తప్పు లేనిది కాదు.</div>
-          <span class="ex-usage">Describes an inanimate object/system that can still have errors.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 03</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Philanthropist</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">fi-LAN-thruh-pist</span></div>
+        <div class="men">A wealthy person who actively seeks to promote the welfare of others, usually through generous donations to good causes.</div>
+        <div class="mtel">దానశీలుడు, మానవతావాది, పరోపకారి</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Benefactor</span><span class="chip cs">Donor</span><span class="chip cs">Humanitarian</span><span class="chip cs">Patron</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Miser</span><span class="chip ca">Stingy person</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The billionaire philanthropist donated millions to build a new cancer hospital.</div><div class="ext">ఆ బిలియనీర్ దానశీలుడు కొత్త క్యాన్సర్ ఆసుపత్రి నిర్మాణానికి మిలియన్లు విరాళంగా ఇచ్చాడు.</div><span class="exu">Subject performing a massive act of charity.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">Mother Teresa is remembered globally as a great philanthropist.</div><div class="ext">మదర్ థెరిస్సా గొప్ప మానవతావాదిగా ప్రపంచవ్యాప్తంగా గుర్తుండిపోతారు.</div><span class="exu">Used as a title of immense respect and legacy.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">He transformed from a greedy businessman into a dedicated philanthropist.</div><div class="ext">అతను అత్యాశగల వ్యాపారవేత్త నుండి అంకితభావం గల దానశీలుడిగా మారాడు.</div><span class="exu">Shows a character arc or change in personality.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">The local school was saved from closing thanks to an anonymous philanthropist.</div><div class="ext">ఒక అజ్ఞాత దాత కృషితో స్థానిక పాఠశాల మూతపడకుండా రక్షించబడింది.</div><span class="exu">Object of a prepositional phrase showing gratitude.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">A true philanthropist gives not just money, but also their time.</div><div class="ext">నిజమైన దానశీలుడు కేవలం డబ్బు మాత్రమే కాదు, తమ సమయాన్ని కూడా ఇస్తాడు.</div><span class="exu">A defining statement about the deep nature of the word.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">He believed his memory was infallible, but he still forgot her birthday.</div>
-          <div class="ex-tel">తన జ్ఞాపకశక్తి ఎప్పుడూ తప్పు చేయదని అతను నమ్మాడు, కానీ అతను ఆమె పుట్టినరోజును మర్చిపోయాడు.</div>
-          <span class="ex-usage">Describes a specific human trait feeling overconfident.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 04</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Misanthrope</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">MIS-an-throhp</span></div>
+        <div class="men">A person who dislikes humankind and generally avoids human society.</div>
+        <div class="mtel">మానవ ద్వేషి, మనుషులను ద్వేషించే వ్యక్తి, ఒంటరిగా ఉండేవాడు</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Cynic</span><span class="chip cs">Recluse</span><span class="chip cs">Hater of mankind</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Philanthropist</span><span class="chip ca">Humanitarian</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">Living alone in the dark woods for decades turned him into a grumpy misanthrope.</div><div class="ext">దశాబ్దాల పాటు చీకటి అడవుల్లో ఒంటరిగా జీవించడం వల్ల అతను కోపదారి మానవ ద్వేషిగా మారాడు.</div><span class="exu">Describes the result of long-term isolation.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">The old man is a misanthrope who yells at children playing near his house.</div><div class="ext">ఆ వృద్ధుడు తన ఇంటి దగ్గర ఆడుకునే పిల్లలపై అరిచే ఒక మానవ ద్వేషి.</div><span class="exu">Subject performing antisocial actions.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">You don't have to be a misanthrope just because you enjoy your alone time.</div><div class="ext">మీరు ఒంటరిగా సమయం గడపడానికి ఇష్టపడినంత మాత్రాన మానవ ద్వేషిగా ఉండాల్సిన అవసరం లేదు.</div><span class="exu">Contrasts a harsh label with a normal human preference.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">In the movie, the villain is a classic misanthrope who wants to destroy the city.</div><div class="ext">సినిమాలో, విలన్ నగరాన్ని నాశనం చేయాలనుకునే ఒక పక్కా మానవ ద్వేషి.</div><span class="exu">Describes a common character trope in storytelling.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">A misanthrope avoids social gatherings and prefers total isolation.</div><div class="ext">మానవ ద్వేషి సామాజిక సమావేశాలకు దూరంగా ఉంటాడు మరియు పూర్తిగా ఒంటరిగా ఉండటానికి ఇష్టపడతాడు.</div><span class="exu">Explains the general behavior pattern of the noun.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">The doctor gave me an infallible cure for my headache.</div>
-          <div class="ex-tel">డాక్టర్ నా తలనొప్పికి ఖచ్చితంగా పనిచేసే మందు ఇచ్చారు.</div>
-          <span class="ex-usage">Describes a solution or method that guarantees success.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 05</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Bureaucracy</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">byoo-ROK-ruh-see</span></div>
+        <div class="men">A system of government in which there are a large number of state officials who are not elected.</div>
+        <div class="mtel">ఎన్నుకోబడని అధికారులచే నడపబడే ప్రభుత్వ వ్యవస్థ, నౌకర్‌షాహీ</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Administration</span><span class="chip cs">Red tape</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Democracy</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The new policy was delayed by slow-moving bureaucracy.</div><div class="ext">కొత్త విధానం నెమ్మదిగా కదిలే అధికార యంత్రాంగం వల్ల ఆలస్యమైంది.</div><span class="exu">Describes a system causing delays and frustration.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">He works as a clerk in the state bureaucracy.</div><div class="ext">అతను రాష్ట్ర ప్రభుత్వ అధికార యంత్రాంగంలో గుమస్తాగా పనిచేస్తున్నాడు.</div><span class="exu">Refers to the physical organization and workforce.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">Many citizens complain about the endless bureaucracy.</div><div class="ext">చాలా మంది పౌరులు అంతులేని నౌకర్‌షాహీ గురించి ఫిర్యాదు చేస్తారు.</div><span class="exu">Refers to frustrating rules and paperwork.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">Reducing bureaucracy will help businesses grow faster.</div><div class="ext">అధికారిక నిబంధనలను తగ్గించడం వల్ల వ్యాపారాలు వేగంగా అభివృద్ధి చెందుతాయి.</div><span class="exu">Actionable business context.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">The hospital's bureaucracy made it hard to get medical records.</div><div class="ext">ఆసుపత్రి అధికారిక నియమాల వల్ల వైద్య రికార్డులు పొందడం కష్టమైంది.</div><span class="exu">Specific institution's complex rules.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">No human being is infallible; we all make mistakes.</div>
-          <div class="ex-tel">ఏ మనిషీ పూర్తిగా పొరపాటు చేయనివాడు కాదు; మనమందరం తప్పులు చేస్తాము.</div>
-          <span class="ex-usage">Universal truth about human nature.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">She has an infallible sense of direction and never gets lost.</div>
-          <div class="ex-tel">ఆమెకు దారి కనుక్కోవడంలో ఎప్పుడూ తప్పు చేయని నైపుణ్యం ఉంది.</div>
-          <span class="ex-usage">Describes a specific, perfected skill.</span>
-        </div>
+      </div></div>
+
+      <div class="app">
+        <h3>Appendix A — Etymology &amp; Memory Tricks</h3>
+        <div class="ppgrid"><span class="pp">Miso- = Hate</span><span class="pp">Phil- = Love</span><span class="pp">Gyn- = Woman</span><span class="pp">Anthropos = Mankind</span><span class="pp">Bureau = Desk</span><span class="pp">-cracy = Rule</span><span class="pp">In- = Not</span><span class="pp">Fallere = Fail</span></div>
+        <ul class="etlist">
+          <li><strong>Infallible</strong> — In (Not) + Fallere (Fail) = Something that never fails</li>
+          <li><strong>Misogynist</strong> — Miso (Hate) + Gyn (Woman) = Person who hates women</li>
+          <li><strong>Philanthropist</strong> — Phil (Love) + Anthropos (Mankind) = Person who helps everyone</li>
+          <li><strong>Misanthrope</strong> — Miso (Hate) + Anthropos (Mankind) = Person who hates everyone</li>
+          <li><strong>Bureaucracy</strong> — Bureau (Desk) + Cracy (Rule) = Rule by officials / desks</li>
+        </ul>
+        <h3>Appendix B — Comprehension Review</h3>
+        <ul class="rvlist" id="r1">
+          <li><span class="rvq">He is a __________ (hates women).</span><span class="rva hidden">Misogynist</span></li>
+          <li><span class="rvq">The slow-moving __________ delayed the project (rule by officials).</span><span class="rva hidden">Bureaucracy</span></li>
+          <li><span class="rvq">No human is __________ (never fails).</span><span class="rva hidden">Infallible</span></li>
+          <li><span class="rvq">He donated millions because he is a __________ (helps people).</span><span class="rva hidden">Philanthropist</span></li>
+          <li><span class="rvq">He hates society; he is a __________ (hates people).</span><span class="rva hidden">Misanthrope</span></li>
+        </ul>
+        <button class="rvbtn" onclick="rv('r1',this)">Reveal answers</button>
       </div>
     </div>
   </div>
 
-  <!-- WORD 2 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 02</span>
-        <span class="source-pill">Part A — SSC OWS</span>
+  <!-- ═══════ DAY 2 ═══════ -->
+  <div id="day-2" class="day-section">
+    <div class="pg-header">
+      <div class="dlabel">Day 2 · Words 6–10 · Part A — SSC OWS</div>
+      <h2>Cannibal to Epilogue</h2>
+      <div class="wpills">
+        <span class="wpill">Cannibal</span><span class="wpill">Claustrophobia</span><span class="wpill">Egoist</span><span class="wpill">Elegy</span><span class="wpill">Epilogue</span>
       </div>
-      <div class="word-name">Misogynist</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun / Adjective</span>
-        <span class="word-pron">mi-SOJ-uh-nist</span>
-      </div>
-      <div class="meaning-en">A person who strongly dislikes, despises, or is prejudiced against women.</div>
-      <div class="meaning-tel">స్త్రీలను ద్వేషించే వ్యక్తి, స్త్రీ ద్వేషి</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Woman-hater</span>
-            <span class="chip chip-syn">Sexist</span>
-            <span class="chip chip-syn">Male chauvinist</span>
-          </div>
+    </div>
+    <div class="content">
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 06</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Cannibal</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">KAN-uh-bul</span></div>
+        <div class="men">A person who eats human flesh.</div>
+        <div class="mtel">నరమాంస భక్షకుడు, మనుషుల మాంసం తినేవాడు</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Man-eater</span><span class="chip cs">Flesh-eater</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Vegetarian</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The ancient tribe was rumored to be cannibals.</div><div class="ext">ఆ పురాతన తెగ నరమాంస భక్షకులు అని పుకారు ఉంది.</div><span class="exu">Historical or mythological context.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">In the horror movie, a cannibal attacks the campers.</div><div class="ext">ఆ భయానక సినిమాలో, ఒక నరమాంస భక్షకుడు క్యాంపర్‌లపై దాడి చేస్తాడు.</div><span class="exu">Fictional storytelling.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">The serial killer was discovered to be a cannibal.</div><div class="ext">ఆ సీరియల్ కిల్లర్ ఒక నరమాంస భక్షకుడని తేలింది.</div><span class="exu">True crime context.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">It is rare to find a genuine cannibal in modern times.</div><div class="ext">ఆధునిక కాలంలో నిజమైన నరమాంస భక్షకుడిని కనుగొనడం అరుదు.</div><span class="exu">General factual statement.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">The word cannibal comes from a Caribbean tribe's name.</div><div class="ext">నరమాంస భక్షకుడు అనే పదం కరేబియన్ తెగ పేరు నుండి వచ్చింది.</div><span class="exu">Etymology and history fact.</span></div>
         </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Feminist</span>
-            <span class="chip chip-ant">Philogynist</span>
-          </div>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 07</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Claustrophobia</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">klaws-truh-FOH-bee-uh</span></div>
+        <div class="men">An extreme fear of being in a small, confined place.</div>
+        <div class="mtel">ఇరుకైన లేదా చిన్న ప్రదేశాలలో ఉండాలంటే విపరీతమైన భయం</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Confinement fear</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Claustrophilia</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">Because of his claustrophobia, he avoids elevators.</div><div class="ext">అతనికి ఇరుకైన ప్రదేశాలంటే భయం ఉన్నందున, అతను లిఫ్ట్‌లను వాడడు.</div><span class="exu">Explaining a real-life behavior.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">Being trapped in the small cave triggered her claustrophobia.</div><div class="ext">చిన్న గుహలో చిక్కుకోవడం ఆమె ఇరుకు ప్రదేశాల భయాన్ని ప్రేరేపించింది.</div><span class="exu">Cause and effect.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">MRI machines can cause claustrophobia in some patients.</div><div class="ext">MRI యంత్రాలు కొందరు రోగులలో ఇరుకు ప్రదేశాల భయాన్ని కలిగిస్తాయి.</div><span class="exu">Medical context.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">He took a deep breath to calm his claustrophobia.</div><div class="ext">తన భయాన్ని తగ్గించుకోవడానికి అతను లోతైన శ్వాస తీసుకున్నాడు.</div><span class="exu">Coping mechanism.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">Claustrophobia makes it difficult to travel in crowded trains.</div><div class="ext">రద్దీగా ఉండే రైళ్లలో ప్రయాణించడానికి ఈ భయం కష్టతరం చేస్తుంది.</div><span class="exu">Everyday struggle.</span></div>
         </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The author's negative portrayal of female characters revealed him to be a misogynist.</div>
-          <div class="ex-tel">రచయిత స్త్రీ పాత్రలను ప్రతికూలంగా చిత్రీకరించడం అతను ఒక స్త్రీ ద్వేషి అని వెల్లడించింది.</div>
-          <span class="ex-usage">Labels someone's hidden character.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 08</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Egoist</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">EE-goh-ist</span></div>
+        <div class="men">A person who thinks he/she is better than other people and who thinks and talks too much about himself/herself.</div>
+        <div class="mtel">స్వార్థపరుడు, తన గురించే గొప్పగా ఆలోచించేవాడు</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Egocentric</span><span class="chip cs">Boaster</span><span class="chip cs">Narcissist</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Altruist</span><span class="chip ca">Modest</span><span class="chip ca">Selfless</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">An egoist rarely listens to the advice of others.</div><div class="ext">ఒక స్వార్థపరుడు అరుదుగా ఇతరుల సలహాలను వింటాడు.</div><span class="exu">General character trait.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">He is such an egoist that he only talks about his achievements.</div><div class="ext">అతను ఎంత స్వార్థపరుడు అంటే, కేవలం తన విజయాల గురించే మాట్లాడతాడు.</div><span class="exu">Specific person's annoying behavior.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">The team failed because the captain was an egoist.</div><div class="ext">కెప్టెన్ స్వార్థపరుడు కావడం వల్ల జట్టు విఫలమైంది.</div><span class="exu">Reason for failure in teamwork.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">It is hard to be friends with an egoist.</div><div class="ext">ఒక స్వార్థపరుడితో స్నేహంగా ఉండటం కష్టం.</div><span class="exu">Social consequence.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">An egoist puts his own needs before everyone else's.</div><div class="ext">ఒక స్వార్థపరుడు అందరికంటే ముందు తన స్వంత అవసరాలకు ప్రాధాన్యత ఇస్తాడు.</div><span class="exu">Defining action.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">She refused to work for a boss who was a known misogynist.</div>
-          <div class="ex-tel">అందరికీ తెలిసిన స్త్రీ ద్వేషి అయిన బాస్ కింద పనిచేయడానికి ఆమె నిరాకరించింది.</div>
-          <span class="ex-usage">Describes a professional environment affected by prejudice.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 09</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Elegy</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">EL-uh-jee</span></div>
+        <div class="men">A poem or song that expresses sadness, especially for somebody who has died.</div>
+        <div class="mtel">చనిపోయిన వారి జ్ఞాపకార్థం పాడే లేదా రాసే శోకగీతం</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Lament</span><span class="chip cs">Requiem</span><span class="chip cs">Dirge</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Paean</span><span class="chip ca">Joyful song</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The poet wrote a beautiful elegy for his dead friend.</div><div class="ext">కవి తన చనిపోయిన స్నేహితుడి కోసం ఒక అందమైన శోకగీతం రాశాడు.</div><span class="exu">Creative expression of grief.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">The song played at the funeral sounded like an elegy.</div><div class="ext">అంత్యక్రియలలో వినిపించిన పాట శోకగీతంలా అనిపించింది.</div><span class="exu">Descriptive comparison of music.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">An elegy captures the sadness of losing a loved one.</div><div class="ext">ఒక శోకగీతం ప్రియమైన వారిని కోల్పోయిన బాధను వ్యక్తపరుస్తుంది.</div><span class="exu">Explaining the core purpose of the word.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">Thomas Gray's "Elegy Written in a Country Churchyard" is very famous.</div><div class="ext">థామస్ గ్రే రాసిన శోకగీతం చాలా ప్రసిద్ధమైనది.</div><span class="exu">Famous literary reference.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">She recited an elegy that moved everyone to tears.</div><div class="ext">ఆమె ఒక శోకగీతాన్ని చదివి అందరినీ కంటతడి పెట్టించింది.</div><span class="exu">Emotional impact of reading it.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">A true misogynist disrespects women's opinions in the workplace.</div>
-          <div class="ex-tel">ఒక నిజమైన స్త్రీ ద్వేషి కార్యాలయంలో మహిళల అభిప్రాయాలను అగౌరవపరుస్తాడు.</div>
-          <span class="ex-usage">Acts as the subject showing the direct action of the noun.</span>
+      </div></div>
+
+      <div class="wcard"><div class="stripe"></div><div class="cbody">
+        <div class="cmeta"><span class="widx">Word 10</span><span class="spill">Part A — SSC OWS</span></div>
+        <div class="wname">Epilogue</div>
+        <div class="wpp"><span class="wpos">Noun</span><span class="wpron">EP-uh-lawg</span></div>
+        <div class="men">A speech at the end of a play, book, or film that comments on or acts as a conclusion to what has happened.</div>
+        <div class="mtel">నాటకం లేదా పుస్తకం చివరలో ఉండే ఉపసంహారం లేదా ముగింపు మాట</div>
+        <div class="sarow"><div class="sablk"><div class="salbl">Synonyms</div><div class="chips"><span class="chip cs">Afterword</span><span class="chip cs">Conclusion</span><span class="chip cs">Postscript</span></div></div><div class="sablk"><div class="salbl">Antonyms</div><div class="chips"><span class="chip ca">Prologue</span><span class="chip ca">Introduction</span></div></div></div>
+        <button class="extog" onclick="tex(this)"><span>Show examples</span><span class="arr">▾</span></button>
+        <div class="expanel">
+          <div class="exi"><div class="exn">Example 1</div><div class="exe">The epilogue explained what happened to the characters ten years later.</div><div class="ext">పది సంవత్సరాల తర్వాత పాత్రలకు ఏమి జరిగిందో ఉపసంహారం వివరించింది.</div><span class="exu">Function in a story.</span></div>
+          <div class="exi"><div class="exn">Example 2</div><div class="exe">I always read the epilogue to get a sense of closure.</div><div class="ext">ముగింపు భావన పొందడానికి నేను ఎల్లప్పుడూ ఉపసంహారాన్ని చదువుతాను.</div><span class="exu">A person's reading habit.</span></div>
+          <div class="exi"><div class="exn">Example 3</div><div class="exe">The author added an epilogue in the second edition of the book.</div><div class="ext">రచయిత పుస్తకం యొక్క రెండవ సంచికలో ఒక ఉపసంహారాన్ని చేర్చారు.</div><span class="exu">Publishing context.</span></div>
+          <div class="exi"><div class="exn">Example 4</div><div class="exe">The movie's epilogue showed the hero living peacefully.</div><div class="ext">సినిమా ఉపసంహారం హీరో ప్రశాంతంగా జీవిస్తున్నట్లు చూపించింది.</div><span class="exu">Cinematic context.</span></div>
+          <div class="exi"><div class="exn">Example 5</div><div class="exe">An epilogue serves as the final note of a literary work.</div><div class="ext">ఉపసంహారం సాహిత్య రచనకు చివరి అంశంగా పనిచేస్తుంది.</div><span class="exu">Definition.</span></div>
         </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">His misogynist comments caused an uproar on social media.</div>
-          <div class="ex-tel">అతని స్త్రీ ద్వేషపూరిత వ్యాఖ్యలు సోషల్ మీడియాలో దుమారం రేపాయి.</div>
-          <span class="ex-usage">Used as an adjective describing the type of comments made.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">Society must educate people to ensure no one grows up to be a misogynist.</div>
-          <div class="ex-tel">ఎవరూ స్త్రీ ద్వేషిగా ఎదగకుండా సమాజం ప్రజలకు అవగాహన కల్పించాలి.</div>
-          <span class="ex-usage">A general moral statement about societal goals.</span>
-        </div>
+      </div></div>
+
+      <div class="app">
+        <h3>Appendix A — Etymology &amp; Memory Tricks</h3>
+        <div class="ppgrid"><span class="pp">Ego = I / Self</span><span class="pp">Epi = After</span><span class="pp">Logos = Speech</span><span class="pp">Claustrum = Closed space</span><span class="pp">-phobia = Fear</span><span class="pp">-ist = Person</span></div>
+        <ul class="etlist">
+          <li><strong>Cannibal</strong> — From Spanish Caníbal = Eater of human flesh (Caribbean tribe)</li>
+          <li><strong>Claustrophobia</strong> — Claustrum (Closed) + Phobia (Fear) = Fear of tight spaces</li>
+          <li><strong>Egoist</strong> — Ego (I / Self) + ist (Person) = Person focused entirely on themselves</li>
+          <li><strong>Elegy</strong> — From Greek Elegos = Sad poem for the dead</li>
+          <li><strong>Epilogue</strong> — Epi (After) + Logos (Speech) = Concluding speech or ending</li>
+        </ul>
+        <h3>Appendix B — Comprehension Review</h3>
+        <ul class="rvlist" id="r2">
+          <li><span class="rvq">Someone who only thinks about themselves is an __________ (self-obsessed).</span><span class="rva hidden">Egoist</span></li>
+          <li><span class="rvq">The author explained the character's future in the book's __________ (concluding speech).</span><span class="rva hidden">Epilogue</span></li>
+          <li><span class="rvq">The poet recited an emotional __________ at his friend's funeral (sad poem).</span><span class="rva hidden">Elegy</span></li>
+          <li><span class="rvq">He refuses to enter the small elevator because of his __________ (fear of tight spaces).</span><span class="rva hidden">Claustrophobia</span></li>
+          <li><span class="rvq">A person that eats human flesh is called a __________ (flesh-eater).</span><span class="rva hidden">Cannibal</span></li>
+        </ul>
+        <button class="rvbtn" onclick="rv('r2',this)">Reveal answers</button>
       </div>
     </div>
   </div>
 
-  <!-- WORD 3 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 03</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Philanthropist</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">fi-LAN-thruh-pist</span>
-      </div>
-      <div class="meaning-en">A wealthy person who actively seeks to promote the welfare of others, usually through generous donations to good causes.</div>
-      <div class="meaning-tel">దానశీలుడు, మానవతావాది, పరోపకారి</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Benefactor</span>
-            <span class="chip chip-syn">Donor</span>
-            <span class="chip chip-syn">Humanitarian</span>
-            <span class="chip chip-syn">Patron</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Miser</span>
-            <span class="chip chip-ant">Stingy person</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The billionaire philanthropist donated millions to build a new cancer hospital.</div>
-          <div class="ex-tel">ఆ బిలియనీర్ దానశీలుడు కొత్త క్యాన్సర్ ఆసుపత్రి నిర్మాణానికి మిలియన్లు విరాళంగా ఇచ్చాడు.</div>
-          <span class="ex-usage">Subject performing a massive act of charity.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">Mother Teresa is remembered globally as a great philanthropist.</div>
-          <div class="ex-tel">మదర్ థెరిస్సా గొప్ప మానవతావాదిగా ప్రపంచవ్యాప్తంగా గుర్తుండిపోతారు.</div>
-          <span class="ex-usage">Used as a title of immense respect and legacy.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">He transformed from a greedy businessman into a dedicated philanthropist.</div>
-          <div class="ex-tel">అతను అత్యాశగల వ్యాపారవేత్త నుండి అంకితభావం గల దానశీలుడిగా మారాడు.</div>
-          <span class="ex-usage">Shows a character arc or change in personality.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">The local school was saved from closing thanks to an anonymous philanthropist.</div>
-          <div class="ex-tel">ఒక అజ్ఞాత దాత కృషితో స్థానిక పాఠశాల మూతపడకుండా రక్షించబడింది.</div>
-          <span class="ex-usage">Object of a prepositional phrase showing gratitude.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">A true philanthropist gives not just money, but also their time.</div>
-          <div class="ex-tel">నిజమైన దానశీలుడు కేవలం డబ్బు మాత్రమే కాదు, తమ సమయాన్ని కూడా ఇస్తాడు.</div>
-          <span class="ex-usage">A defining statement about the deep nature of the word.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 4 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 04</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Misanthrope</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">MIS-an-throhp</span>
-      </div>
-      <div class="meaning-en">A person who dislikes humankind and generally avoids human society.</div>
-      <div class="meaning-tel">మానవ ద్వేషి, మనుషులను ద్వేషించే వ్యక్తి, ఒంటరిగా ఉండేవాడు</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Cynic</span>
-            <span class="chip chip-syn">Recluse</span>
-            <span class="chip chip-syn">Hater of mankind</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Philanthropist</span>
-            <span class="chip chip-ant">Humanitarian</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">Living alone in the dark woods for decades turned him into a grumpy misanthrope.</div>
-          <div class="ex-tel">దశాబ్దాల పాటు చీకటి అడవుల్లో ఒంటరిగా జీవించడం వల్ల అతను కోపదారి మానవ ద్వేషిగా మారాడు.</div>
-          <span class="ex-usage">Describes the result of long-term isolation.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">The old man is a misanthrope who yells at children playing near his house.</div>
-          <div class="ex-tel">ఆ వృద్ధుడు తన ఇంటి దగ్గర ఆడుకునే పిల్లలపై అరిచే ఒక మానవ ద్వేషి.</div>
-          <span class="ex-usage">Subject performing antisocial actions.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">You don't have to be a misanthrope just because you enjoy your alone time.</div>
-          <div class="ex-tel">మీరు ఒంటరిగా సమయం గడపడానికి ఇష్టపడినంత మాత్రాన మానవ ద్వేషిగా ఉండాల్సిన అవసరం లేదు.</div>
-          <span class="ex-usage">Contrasts a harsh label with a normal human preference.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">In the movie, the villain is a classic misanthrope who wants to destroy the city.</div>
-          <div class="ex-tel">సినిమాలో, విలన్ నగరాన్ని నాశనం చేయాలనుకునే ఒక పక్కా మానవ ద్వేషి.</div>
-          <span class="ex-usage">Describes a common character trope in storytelling.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">A misanthrope avoids social gatherings and prefers total isolation.</div>
-          <div class="ex-tel">మానవ ద్వేషి సామాజిక సమావేశాలకు దూరంగా ఉంటాడు మరియు పూర్తిగా ఒంటరిగా ఉండటానికి ఇష్టపడతాడు.</div>
-          <span class="ex-usage">Explains the general behavior pattern of the noun.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 5 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 05</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Bureaucracy</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">byoo-ROK-ruh-see</span>
-      </div>
-      <div class="meaning-en">A system of government in which there are a large number of state officials who are not elected.</div>
-      <div class="meaning-tel">ఎన్నుకోబడని అధికారులచే నడపబడే ప్రభుత్వ వ్యవస్థ, నౌకర్‌షాహీ</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Administration</span>
-            <span class="chip chip-syn">Red tape</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Democracy</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The new policy was delayed by slow-moving bureaucracy.</div>
-          <div class="ex-tel">కొత్త విధానం నెమ్మదిగా కదిలే అధికార యంత్రాంగం వల్ల ఆలస్యమైంది.</div>
-          <span class="ex-usage">Describes a system causing delays and frustration.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">He works as a clerk in the state bureaucracy.</div>
-          <div class="ex-tel">అతను రాష్ట్ర ప్రభుత్వ అధికార యంత్రాంగంలో గుమస్తాగా పనిచేస్తున్నాడు.</div>
-          <span class="ex-usage">Refers to the physical organization and workforce.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">Many citizens complain about the endless bureaucracy.</div>
-          <div class="ex-tel">చాలా మంది పౌరులు అంతులేని నౌకర్‌షాహీ గురించి ఫిర్యాదు చేస్తారు.</div>
-          <span class="ex-usage">Refers to frustrating rules and paperwork.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">Reducing bureaucracy will help businesses grow faster.</div>
-          <div class="ex-tel">అధికారిక నిబంధనలను తగ్గించడం వల్ల వ్యాపారాలు వేగంగా అభివృద్ధి చెందుతాయి.</div>
-          <span class="ex-usage">Actionable business context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">The hospital's bureaucracy made it hard to get medical records.</div>
-          <div class="ex-tel">ఆసుపత్రి అధికారిక నియమాల వల్ల వైద్య రికార్డులు పొందడం కష్టమైంది.</div>
-          <span class="ex-usage">Specific institution's complex rules.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- APPENDIX DAY 1 -->
-  <div class="appendix">
-    <h3>Appendix A — Etymology & Memory Tricks</h3>
-    <div class="prefix-grid">
-      <span class="prefix-pill">Miso- = Hate</span>
-      <span class="prefix-pill">Phil- = Love</span>
-      <span class="prefix-pill">Gyn- = Woman</span>
-      <span class="prefix-pill">Anthropos = Mankind</span>
-      <span class="prefix-pill">Bureau = Desk</span>
-      <span class="prefix-pill">-cracy = Rule</span>
-      <span class="prefix-pill">In- = Not</span>
-      <span class="prefix-pill">Fallere = Fail</span>
-    </div>
-    <ul class="etym-list">
-      <li><strong>Infallible</strong> — In (Not) + Fallere (Fail) = Something that never fails</li>
-      <li><strong>Misogynist</strong> — Miso (Hate) + Gyn (Woman) = Person who hates women</li>
-      <li><strong>Philanthropist</strong> — Phil (Love) + Anthropos (Mankind) = Person who helps everyone</li>
-      <li><strong>Misanthrope</strong> — Miso (Hate) + Anthropos (Mankind) = Person who hates everyone</li>
-      <li><strong>Bureaucracy</strong> — Bureau (Desk) + Cracy (Rule) = Rule by officials / desks</li>
-    </ul>
-    <h3 style="margin-top:1.25rem">Appendix B — Comprehension Review</h3>
-    <ul class="review-list" id="review-1">
-      <li>He is a __________ (hates women). <span class="review-answer hidden">Misogynist</span></li>
-      <li>The slow-moving __________ delayed the project (rule by officials). <span class="review-answer hidden">Bureaucracy</span></li>
-      <li>No human is __________ (never fails). <span class="review-answer hidden">Infallible</span></li>
-      <li>He donated millions because he is a __________ (helps people). <span class="review-answer hidden">Philanthropist</span></li>
-      <li>He hates society and avoids everyone; he is a __________ (hates people). <span class="review-answer hidden">Misanthrope</span></li>
-    </ul>
-    <button class="show-answers-btn" onclick="showAnswers('review-1', this)">Reveal answers</button>
-  </div>
-
-</section>
-
-<!-- ══════════════════════════════════════════
-     DAY 2
-═══════════════════════════════════════════ -->
-<section id="day-2" class="day-section">
-
-  <div class="day-header">
-    <h2>Day 2 — Words 6 to 10</h2>
-    <span class="day-meta">Part A · SSC Previous Years</span>
-  </div>
-
-  <!-- WORD 6 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 06</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Cannibal</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">KAN-uh-bul</span>
-      </div>
-      <div class="meaning-en">A person who eats human flesh.</div>
-      <div class="meaning-tel">నరమాంస భక్షకుడు, మనుషుల మాంసం తినేవాడు</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Man-eater</span>
-            <span class="chip chip-syn">Flesh-eater</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Vegetarian</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The ancient tribe was rumored to be cannibals.</div>
-          <div class="ex-tel">ఆ పురాతన తెగ నరమాంస భక్షకులు అని పుకారు ఉంది.</div>
-          <span class="ex-usage">Historical or mythological context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">In the horror movie, a cannibal attacks the campers.</div>
-          <div class="ex-tel">ఆ భయానక సినిమాలో, ఒక నరమాంస భక్షకుడు క్యాంపర్‌లపై దాడి చేస్తాడు.</div>
-          <span class="ex-usage">Fictional storytelling.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">The serial killer was discovered to be a cannibal.</div>
-          <div class="ex-tel">ఆ సీరియల్ కిల్లర్ ఒక నరమాంస భక్షకుడని తేలింది.</div>
-          <span class="ex-usage">True crime context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">It is rare to find a genuine cannibal in modern times.</div>
-          <div class="ex-tel">ఆధునిక కాలంలో నిజమైన నరమాంస భక్షకుడిని కనుగొనడం అరుదు.</div>
-          <span class="ex-usage">General factual statement.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">The word cannibal comes from a Caribbean tribe's name.</div>
-          <div class="ex-tel">నరమాంస భక్షకుడు అనే పదం కరేబియన్ తెగ పేరు నుండి వచ్చింది.</div>
-          <span class="ex-usage">Etymology and history fact.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 7 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 07</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Claustrophobia</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">klaws-truh-FOH-bee-uh</span>
-      </div>
-      <div class="meaning-en">An extreme fear of being in a small, confined place.</div>
-      <div class="meaning-tel">ఇరుకైన లేదా చిన్న ప్రదేశాలలో ఉండాలంటే విపరీతమైన భయం</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Confinement fear</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Claustrophilia</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">Because of his claustrophobia, he avoids elevators.</div>
-          <div class="ex-tel">అతనికి ఇరుకైన ప్రదేశాలంటే భయం ఉన్నందున, అతను లిఫ్ట్‌లను వాడడు.</div>
-          <span class="ex-usage">Explaining a real-life behavior.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">Being trapped in the small cave triggered her claustrophobia.</div>
-          <div class="ex-tel">చిన్న గుహలో చిక్కుకోవడం ఆమె ఇరుకు ప్రదేశాల భయాన్ని ప్రేరేపించింది.</div>
-          <span class="ex-usage">Cause and effect.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">MRI machines can cause claustrophobia in some patients.</div>
-          <div class="ex-tel">MRI యంత్రాలు కొందరు రోగులలో ఇరుకు ప్రదేశాల భయాన్ని కలిగిస్తాయి.</div>
-          <span class="ex-usage">Medical context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">He took a deep breath to calm his claustrophobia.</div>
-          <div class="ex-tel">తన భయాన్ని తగ్గించుకోవడానికి అతను లోతైన శ్వాస తీసుకున్నాడు.</div>
-          <span class="ex-usage">Coping mechanism.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">Claustrophobia makes it difficult to travel in crowded trains.</div>
-          <div class="ex-tel">రద్దీగా ఉండే రైళ్లలో ప్రయాణించడానికి ఈ భయం కష్టతరం చేస్తుంది.</div>
-          <span class="ex-usage">Everyday struggle.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 8 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 08</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Egoist</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">EE-goh-ist</span>
-      </div>
-      <div class="meaning-en">A person who thinks he/she is better than other people and who thinks and talks too much about himself/herself.</div>
-      <div class="meaning-tel">స్వార్థపరుడు, తన గురించే గొప్పగా ఆలోచించేవాడు</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Egocentric</span>
-            <span class="chip chip-syn">Boaster</span>
-            <span class="chip chip-syn">Narcissist</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Altruist</span>
-            <span class="chip chip-ant">Modest</span>
-            <span class="chip chip-ant">Selfless</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">An egoist rarely listens to the advice of others.</div>
-          <div class="ex-tel">ఒక స్వార్థపరుడు అరుదుగా ఇతరుల సలహాలను వింటాడు.</div>
-          <span class="ex-usage">General character trait.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">He is such an egoist that he only talks about his achievements.</div>
-          <div class="ex-tel">అతను ఎంత స్వార్థపరుడు అంటే, కేవలం తన విజయాల గురించే మాట్లాడతాడు.</div>
-          <span class="ex-usage">Specific person's annoying behavior.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">The team failed because the captain was an egoist.</div>
-          <div class="ex-tel">కెప్టెన్ స్వార్థపరుడు కావడం వల్ల జట్టు విఫలమైంది.</div>
-          <span class="ex-usage">Reason for failure in teamwork.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">It is hard to be friends with an egoist.</div>
-          <div class="ex-tel">ఒక స్వార్థపరుడితో స్నేహంగా ఉండటం కష్టం.</div>
-          <span class="ex-usage">Social consequence.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">An egoist puts his own needs before everyone else's.</div>
-          <div class="ex-tel">ఒక స్వార్థపరుడు అందరికంటే ముందు తన స్వంత అవసరాలకు ప్రాధాన్యత ఇస్తాడు.</div>
-          <span class="ex-usage">Defining action.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 9 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 09</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Elegy</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">EL-uh-jee</span>
-      </div>
-      <div class="meaning-en">A poem or song that expresses sadness, especially for somebody who has died.</div>
-      <div class="meaning-tel">చనిపోయిన వారి జ్ఞాపకార్థం పాడే లేదా రాసే శోకగీతం</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Lament</span>
-            <span class="chip chip-syn">Requiem</span>
-            <span class="chip chip-syn">Dirge</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Paean</span>
-            <span class="chip chip-ant">Joyful song</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The poet wrote a beautiful elegy for his dead friend.</div>
-          <div class="ex-tel">కవి తన చనిపోయిన స్నేహితుడి కోసం ఒక అందమైన శోకగీతం రాశాడు.</div>
-          <span class="ex-usage">Creative expression of grief.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">The song played at the funeral sounded like an elegy.</div>
-          <div class="ex-tel">అంత్యక్రియలలో వినిపించిన పాట శోకగీతంలా అనిపించింది.</div>
-          <span class="ex-usage">Descriptive comparison of music.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">An elegy captures the sadness of losing a loved one.</div>
-          <div class="ex-tel">ఒక శోకగీతం ప్రియమైన వారిని కోల్పోయిన బాధను వ్యక్తపరుస్తుంది.</div>
-          <span class="ex-usage">Explaining the core purpose of the word.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">Thomas Gray's "Elegy Written in a Country Churchyard" is very famous.</div>
-          <div class="ex-tel">థామస్ గ్రే రాసిన శోకగీతం చాలా ప్రసిద్ధమైనది.</div>
-          <span class="ex-usage">Famous literary reference.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">She recited an elegy that moved everyone to tears.</div>
-          <div class="ex-tel">ఆమె ఒక శోకగీతాన్ని చదివి అందరినీ కంటతడి పెట్టించింది.</div>
-          <span class="ex-usage">Emotional impact of reading it.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WORD 10 -->
-  <div class="word-card">
-    <div class="card-stripe"></div>
-    <div class="card-body">
-      <div class="card-meta">
-        <span class="word-index">Word 10</span>
-        <span class="source-pill">Part A — SSC OWS</span>
-      </div>
-      <div class="word-name">Epilogue</div>
-      <div class="word-pos-pron">
-        <span class="word-pos">Noun</span>
-        <span class="word-pron">EP-uh-lawg</span>
-      </div>
-      <div class="meaning-en">A speech at the end of a play, book, or film that comments on or acts as a conclusion to what has happened.</div>
-      <div class="meaning-tel">నాటకం లేదా పుస్తకం చివరలో ఉండే ఉపసంహారం లేదా ముగింపు మాట</div>
-      <div class="sa-row">
-        <div class="sa-block">
-          <div class="sa-label">Synonyms</div>
-          <div class="chips">
-            <span class="chip chip-syn">Afterword</span>
-            <span class="chip chip-syn">Conclusion</span>
-            <span class="chip chip-syn">Postscript</span>
-          </div>
-        </div>
-        <div class="sa-block">
-          <div class="sa-label">Antonyms</div>
-          <div class="chips">
-            <span class="chip chip-ant">Prologue</span>
-            <span class="chip chip-ant">Introduction</span>
-          </div>
-        </div>
-      </div>
-      <button class="examples-toggle" onclick="toggleEx(this)">
-        <span>Show examples</span><span class="arrow">▾</span>
-      </button>
-      <div class="examples-panel">
-        <div class="example-item">
-          <div class="ex-num">Example 1</div>
-          <div class="ex-en">The epilogue explained what happened to the characters ten years later.</div>
-          <div class="ex-tel">పది సంవత్సరాల తర్వాత పాత్రలకు ఏమి జరిగిందో ఉపసంహారం వివరించింది.</div>
-          <span class="ex-usage">Function in a story.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 2</div>
-          <div class="ex-en">I always read the epilogue to get a sense of closure.</div>
-          <div class="ex-tel">ముగింపు భావన పొందడానికి నేను ఎల్లప్పుడూ ఉపసంహారాన్ని చదువుతాను.</div>
-          <span class="ex-usage">A person's reading habit.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 3</div>
-          <div class="ex-en">The author added an epilogue in the second edition of the book.</div>
-          <div class="ex-tel">రచయిత పుస్తకం యొక్క రెండవ సంచికలో ఒక ఉపసంహారాన్ని చేర్చారు.</div>
-          <span class="ex-usage">Publishing context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 4</div>
-          <div class="ex-en">The movie's epilogue showed the hero living peacefully.</div>
-          <div class="ex-tel">సినిమా ఉపసంహారం హీరో ప్రశాంతంగా జీవిస్తున్నట్లు చూపించింది.</div>
-          <span class="ex-usage">Cinematic context.</span>
-        </div>
-        <div class="example-item">
-          <div class="ex-num">Example 5</div>
-          <div class="ex-en">An epilogue serves as the final note of a literary work.</div>
-          <div class="ex-tel">ఉపసంహారం సాహిత్య రచనకు చివరి అంశంగా పనిచేస్తుంది.</div>
-          <span class="ex-usage">Definition.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- APPENDIX DAY 2 -->
-  <div class="appendix">
-    <h3>Appendix A — Etymology & Memory Tricks</h3>
-    <div class="prefix-grid">
-      <span class="prefix-pill">Ego = I / Self</span>
-      <span class="prefix-pill">Epi = After</span>
-      <span class="prefix-pill">Logos = Speech</span>
-      <span class="prefix-pill">Claustrum = Closed space</span>
-      <span class="prefix-pill">-phobia = Fear</span>
-      <span class="prefix-pill">-ist = Person</span>
-    </div>
-    <ul class="etym-list">
-      <li><strong>Cannibal</strong> — From Spanish Caníbal = Eater of human flesh (Caribbean tribe)</li>
-      <li><strong>Claustrophobia</strong> — Claustrum (Closed) + Phobia (Fear) = Fear of tight spaces</li>
-      <li><strong>Egoist</strong> — Ego (I / Self) + ist (Person) = Person focused entirely on themselves</li>
-      <li><strong>Elegy</strong> — From Greek Elegos = Sad poem for the dead</li>
-      <li><strong>Epilogue</strong> — Epi (After) + Logos (Speech) = Concluding speech or ending</li>
-    </ul>
-    <h3 style="margin-top:1.25rem">Appendix B — Comprehension Review</h3>
-    <ul class="review-list" id="review-2">
-      <li>Someone who only thinks and talks about themselves is an __________ (self-obsessed). <span class="review-answer hidden">Egoist</span></li>
-      <li>The author explained the character's future in the book's __________ (concluding speech). <span class="review-answer hidden">Epilogue</span></li>
-      <li>The poet recited an emotional __________ at his best friend's funeral (sad poem). <span class="review-answer hidden">Elegy</span></li>
-      <li>He refuses to go inside the small elevator because of his __________ (fear of tight spaces). <span class="review-answer hidden">Claustrophobia</span></li>
-      <li>A fictional monster or person that eats human flesh is called a __________ (flesh-eater). <span class="review-answer hidden">Cannibal</span></li>
-    </ul>
-    <button class="show-answers-btn" onclick="showAnswers('review-2', this)">Reveal answers</button>
-  </div>
-
-</section>
-</main>
+</div>
 
 <script>
-  function switchDay(n, btn) {
-    document.querySelectorAll('.day-section').forEach(s => s.classList.remove('visible'));
-    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('day-' + n).classList.add('visible');
-    btn.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function toggleEx(btn) {
-    const panel = btn.nextElementSibling;
-    const isOpen = panel.classList.toggle('open');
-    btn.classList.toggle('open', isOpen);
-    btn.querySelector('span:first-child').textContent = isOpen ? 'Hide examples' : 'Show examples';
-  }
-
-  function showAnswers(listId, btn) {
-    document.querySelectorAll('#' + listId + ' .review-answer').forEach(a => a.classList.remove('hidden'));
-    btn.textContent = 'Answers shown';
-    btn.disabled = true;
-    btn.style.opacity = '.5';
-  }
+function sw(n,el){
+  document.querySelectorAll('.day-section').forEach(s=>s.classList.remove('visible'));
+  document.querySelectorAll('.day-item').forEach(d=>d.classList.remove('active'));
+  document.getElementById('day-'+n).classList.add('visible');
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  closeSB();
+}
+function tex(btn){
+  const p=btn.nextElementSibling;
+  const o=p.classList.toggle('open');
+  btn.classList.toggle('open',o);
+  btn.querySelector('span:first-child').textContent=o?'Hide examples':'Show examples';
+}
+function rv(id,btn){
+  document.querySelectorAll('#'+id+' .rva').forEach(a=>a.classList.remove('hidden'));
+  btn.textContent='Answers shown';btn.disabled=true;
+}
+function togSB(){
+  document.getElementById('sb').classList.toggle('open');
+  document.getElementById('ov').classList.toggle('open');
+}
+function closeSB(){
+  document.getElementById('sb').classList.remove('open');
+  document.getElementById('ov').classList.remove('open');
+}
 </script>
 </body>
 </html>
